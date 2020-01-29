@@ -14,9 +14,12 @@ clientSocket.settimeout(1)
 # variables to tracking and calculating stats
 numPings = 10
 sequence = 1
+rtt = 0
 minRtt = 0
 maxRtt = 0
 avgRtt = 0
+estRtt = 0
+devRtt = 0
 packetsDropped = 0.0
 
 while sequence <= numPings:
@@ -45,15 +48,11 @@ while sequence <= numPings:
         print 'RTT is {} seconds.\n'.format(rtt)
 
         # check min RTT
-        if minRtt == 0:
-            minRtt = rtt
-        elif minRtt > rtt:
+        if minRtt == 0 or minRtt > rtt:
             minRtt = rtt
 
         # check max RTT
-        if maxRtt == 0:
-            maxRtt = rtt
-        elif maxRtt < rtt:
+        if maxRtt == 0 or maxRtt < rtt:
             maxRtt = rtt
 
         # add to avg RTT so we can calculate later
@@ -68,9 +67,17 @@ while sequence <= numPings:
     # increment sequence
     sequence += 1
 
+    # calculate estRtt
+    estRtt = (1 - 0.125) * estRtt + 0.125 * rtt
+
+    # calculate devRtt
+    devRtt = (1 - 0.25) * devRtt + 0.25 * abs(rtt - estRtt)
+
 clientSocket.close()
 
 # RTT stats
 print "RTT stats: "
 print "rtt_min = {} rtt_max = {} rtt_avg = {}".format(minRtt, maxRtt, avgRtt/numPings)
 print "Packet Loss: {}%".format(packetsDropped/numPings*100)
+print "EstRtt calculated to: {}".format(estRtt)
+print "DevRTT calculated to: {}".format(devRtt)
