@@ -37,6 +37,7 @@ while sequence <= numPings:
         # return time
         timeReceived = datetime.now()
         print 'Return message from server received at {}'.format(timeReceived)
+        print returnMessage
 
         # calculate RTT, td becomes timedelta object, rtt uses .total_seconds() to make more readable
         td = timeReceived - timeSent
