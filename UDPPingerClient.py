@@ -1,6 +1,5 @@
 from socket import *
 from datetime import datetime
-import time
 
 # will want to change to host IP for mininet use
 # specify host name and port for easier readability
