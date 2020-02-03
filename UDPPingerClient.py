@@ -1,3 +1,6 @@
+# CST 311 Programming Assignment #2
+# PA2_Gonzalez, Houser, Pettit, Reed
+
 from socket import *
 from datetime import datetime
 
