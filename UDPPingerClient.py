@@ -6,7 +6,7 @@ from datetime import datetime
 
 # will want to change to host IP for mininet use
 # specify host name and port for easier readability
-serverName = 'Localhost'
+serverName = 'Localhost'        # for mininet testing 10.0.0.2 was used as the server address
 serverPort = 12000
 
 # create socket and set timeout
