@@ -60,6 +60,14 @@ while sequence <= numPings:
         # add to avg RTT so we can calculate later
         avgRtt = avgRtt + rtt
 
+        # calculate estRtt
+        if estRtt == 0:
+            estRtt = rtt
+        estRtt = (1 - 0.125) * estRtt + 0.125 * rtt
+
+        # calculate devRtt
+        devRtt = (1 - 0.25) * devRtt + 0.25 * abs(rtt - estRtt)
+
     except timeout:
         print 'Request timed out.  Packet {} lost.\n'.format(sequence)
 
@@ -69,17 +77,14 @@ while sequence <= numPings:
     # increment sequence
     sequence += 1
 
-    # calculate estRtt
-    estRtt = (1 - 0.125) * estRtt + 0.125 * rtt
 
-    # calculate devRtt
-    devRtt = (1 - 0.25) * devRtt + 0.25 * abs(rtt - estRtt)
 
 clientSocket.close()
 
 # RTT stats
 print "RTT stats: "
-print "rtt_min = {} rtt_max = {} rtt_avg = {}".format(minRtt, maxRtt, avgRtt/numPings)
+# for avg RTT we are excluding dropped packets from the calculation
+print "rtt_min = {} rtt_max = {} rtt_avg = {}".format(minRtt, maxRtt, avgRtt/(numPings - packetsDropped))
 print "Packet Loss: {}%".format(packetsDropped/numPings*100)
 print "EstRtt calculated to: {}".format(estRtt)
 print "DevRTT calculated to: {}".format(devRtt)
